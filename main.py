@@ -24,34 +24,61 @@ for y in range(0,len(second_values)):
 
 class Pracownik:
 
-  def __init__(self, imie, wynagrodzenie_brutt):
-   self.imie = imie 
-   self.wynagrodzenie_brutt = wynagrodzenie_brutt
+    def __init__(self, imie, wynagrodzenie_brutt):
+      self.imie = imie 
+      self.wynagrodzenie_brutt = wynagrodzenie_brutt
 
 
-  
-  def wynik(self):
-    emerytalna = self.wynagrodzenie_brutt* 0.0976
-    rentowa = self.wynagrodzenie_brutt * 0.065
-    wypadkowa = self.wynagrodzenie_brutt * 0.0195
-    fp = self.wynagrodzenie_brutt * 0.0245
-    FGŚP = self.wynagrodzenie_brutt * 0.001
-    pracodawca_koszt = round(self.wynagrodzenie_brutt + emerytalna + rentowa + wypadkowa + fp + FGŚP, 2)
+    def oblicz_emerytalna(self):
+      return round(0.0976 * self.wynagrodzenie_brutt, 2)
+    
+    def oblicz_rentowa(self, procent):
+      return round(procent/100 * self.wynagrodzenie_brutt)
 
-    #Tu jest liczona kwota wynagrodzenia netto
-    do_odliczenia = self.wynagrodzenie_brutt * 0.23
-    kwota_netto = round(self.wynagrodzenie_brutt - do_odliczenia, 2)
 
-  
-    print(f'{self.imie} {kwota_netto} {pracodawca_koszt}')
-  
+    
+    
+    def netto(self):
+      emerytalna = self.oblicz_emerytalna()
+      rentowa = self.oblicz_rentowa(1.5)
+      wypadkowa = round(self.wynagrodzenie_brutt * 0.0245, 2)
+      ubez_społeczne = round(emerytalna+wypadkowa+rentowa,2)
+      podstawa_na_zdrowotne = self.wynagrodzenie_brutt - ubez_społeczne
+      zdrowotne_z_wynagrodzenia = round(0.09 * podstawa_na_zdrowotne, 2)
+      zdrowotne_z_podatku = round(0.0775*podstawa_na_zdrowotne)
+      koszty_uzyskania_przychodu = 111.25
+      podstawa_zaliczki_na_dochodowy = round(self.wynagrodzenie_brutt -
+      koszty_uzyskania_przychodu, 0)
+      zaliczka_na_dochodowy_przed_zdrowotna = round(0.18*podstawa_zaliczki_na_dochodowy -46.33, 2)
+      zaliczka_na_dochodowy_pobranie = round(zaliczka_na_dochodowy_przed_zdrowotna - zdrowotne_z_podatku,0)
+      kwota_do_wyplaty = self.wynagrodzenie_brutt - ubez_społeczne - zdrowotne_z_wynagrodzenia - zaliczka_na_dochodowy_pobranie
+      return kwota_do_wyplaty
+      
+      
+
+      
+    def skladki_pracodawcy(self):
+      sk_emerytalna = self.oblicz_emerytalna()
+      sk_rentowa = self.oblicz_rentowa(6.5)
+      sk_wypadkowa = round(self.wynagrodzenie_brutt*0.0193, 2)
+      sk_FP = round(self.wynagrodzenie_brutt*0.0245, 2)
+      FGŚP = round(self.wynagrodzenie_brutt*0.001, 2)
+      sk_pracodawcy = sk_emerytalna + sk_rentowa + sk_wypadkowa + sk_FP + FGŚP
+      return sk_pracodawcy
+
+
+    def koszt_pracodawcy(self):
+      koszt_pracodawcy = self.wynagrodzenie_brutt + self.skladki_pracodawcy()
+      return koszt_pracodawcy
+
+
 
 
 for n in range(0,len(second_values)):
   x = first_values_str[n]
   y = second_values[n]
   instance = Pracownik(x,y)
-  instance.wynik()
+  print(f'{instance.imie} {instance.netto()} {instance.skladki_pracodawcy()} {instance.koszt_pracodawcy()}')
 
   
 '''
