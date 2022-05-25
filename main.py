@@ -33,23 +33,23 @@ class Pracownik:
       return round(0.0976 * self.wynagrodzenie_brutt, 2)
     
     def oblicz_rentowa(self, procent):
-      return round(procent/100 * self.wynagrodzenie_brutt)
+      return round(procent/100 * self.wynagrodzenie_brutt,2)
 
 
     
     
-    def netto(self) ->float:
+    def netto(self) -> float:
       emerytalna = self.oblicz_emerytalna()
       rentowa = self.oblicz_rentowa(1.5)
-      wypadkowa = round(self.wynagrodzenie_brutt * 0.0245, 2)
-      ubez_społeczne = round(emerytalna+wypadkowa+rentowa,2)
-      podstawa_na_zdrowotne = self.wynagrodzenie_brutt - ubez_społeczne
+      chorobowa = round(self.wynagrodzenie_brutt * 0.0245, 2)
+      sk = round(emerytalna + rentowa + chorobowa, 2)
+      ubez_społeczne = round(emerytalna+chorobowa+rentowa,2)
+      podstawa_na_zdrowotne = round(self.wynagrodzenie_brutt - ubez_społeczne,2)
       zdrowotne_z_wynagrodzenia = round(0.09 * podstawa_na_zdrowotne, 2)
-      zdrowotne_z_podatku = round(0.0775*podstawa_na_zdrowotne)
+      zdrowotne_z_podatku = round(0.0775*podstawa_na_zdrowotne,2)
       koszty_uzyskania_przychodu = 111.25
-      podstawa_zaliczki_na_dochodowy = round(self.wynagrodzenie_brutt -
-      koszty_uzyskania_przychodu, 0)
-      zaliczka_na_dochodowy_przed_zdrowotna = round(0.18*podstawa_zaliczki_na_dochodowy -46.33, 2)
+      podstawa_zaliczki_na_dochodowy = round(self.wynagrodzenie_brutt - koszty_uzyskania_przychodu - sk, 0)
+      zaliczka_na_dochodowy_przed_zdrowotna = round(round(0.18*podstawa_zaliczki_na_dochodowy,2) - 46.33, 2)
       zaliczka_na_dochodowy_pobranie = round(zaliczka_na_dochodowy_przed_zdrowotna - zdrowotne_z_podatku,0)
       kwota_do_wyplaty = round(self.wynagrodzenie_brutt - ubez_społeczne - zdrowotne_z_wynagrodzenia - zaliczka_na_dochodowy_pobranie, 2)
       return kwota_do_wyplaty
