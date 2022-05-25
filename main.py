@@ -38,7 +38,7 @@ class Pracownik:
 
     
     
-    def netto(self):
+    def netto(self) ->float:
       emerytalna = self.oblicz_emerytalna()
       rentowa = self.oblicz_rentowa(1.5)
       wypadkowa = round(self.wynagrodzenie_brutt * 0.0245, 2)
@@ -51,24 +51,24 @@ class Pracownik:
       koszty_uzyskania_przychodu, 0)
       zaliczka_na_dochodowy_przed_zdrowotna = round(0.18*podstawa_zaliczki_na_dochodowy -46.33, 2)
       zaliczka_na_dochodowy_pobranie = round(zaliczka_na_dochodowy_przed_zdrowotna - zdrowotne_z_podatku,0)
-      kwota_do_wyplaty = self.wynagrodzenie_brutt - ubez_społeczne - zdrowotne_z_wynagrodzenia - zaliczka_na_dochodowy_pobranie
+      kwota_do_wyplaty = round(self.wynagrodzenie_brutt - ubez_społeczne - zdrowotne_z_wynagrodzenia - zaliczka_na_dochodowy_pobranie, 2)
       return kwota_do_wyplaty
       
       
 
       
-    def skladki_pracodawcy(self):
+    def skladki_pracodawcy(self) -> float:
       sk_emerytalna = self.oblicz_emerytalna()
       sk_rentowa = self.oblicz_rentowa(6.5)
       sk_wypadkowa = round(self.wynagrodzenie_brutt*0.0193, 2)
       sk_FP = round(self.wynagrodzenie_brutt*0.0245, 2)
       FGŚP = round(self.wynagrodzenie_brutt*0.001, 2)
-      sk_pracodawcy = sk_emerytalna + sk_rentowa + sk_wypadkowa + sk_FP + FGŚP
+      sk_pracodawcy = round(sk_emerytalna + sk_rentowa + sk_wypadkowa + sk_FP + FGŚP, 2)
       return sk_pracodawcy
 
 
-    def koszt_pracodawcy(self):
-      koszt_pracodawcy = self.wynagrodzenie_brutt + self.skladki_pracodawcy()
+    def koszt_pracodawcy(self) -> float:
+      koszt_pracodawcy = round(self.wynagrodzenie_brutt + self.skladki_pracodawcy(),2)
       return koszt_pracodawcy
 
 
